@@ -21,10 +21,10 @@ class PostSerializer(serializers.ModelSerializer):
         fields = (
             'id',
             'text',
-            'pub_date',
             'author',
             'image',
             'group',
+            'pub_date',
         )
 
 
