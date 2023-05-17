@@ -1,5 +1,6 @@
 from rest_framework import viewsets
 
+from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404
 
 from posts.models import Group, Post, Comment, User
@@ -18,6 +19,16 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer):
         serializer.save(author=self.request.user)
+
+    def perform_update(self, serializer):
+        if serializer.instance.author != self.request.user:
+            raise PermissionDenied('Изменение чужого контента запрещено!')
+        super(PostViewSet, self).perform_update(serializer)
+
+    def perform_destroy(self, serializer):
+        if serializer.instance.author != self.request.user:
+            raise PermissionDenied('Удаление чужого контента запрещено!')
+        super(PostViewSet, self).perform_update(serializer)
 
 
 class CommentViewSet(viewsets.ModelViewSet):
