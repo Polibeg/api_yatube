@@ -6,6 +6,9 @@ from posts.models import Group, Post, Comment
 from .serializers import GroupSerializer, PostSerializer, CommentSerializer
 
 
+notchange = 'Изменение чужого контента запрещено!'
+notdel = 'Удалние чужого поста запрещено!'
+
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
@@ -20,12 +23,12 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
-            raise PermissionDenied('Изменение чужого контента запрещено!')
+            raise PermissionDenied(notchange)
         super().perform_update(serializer)
 
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
-            raise PermissionDenied('Удалние чужого поста запрещено!')
+            raise PermissionDenied(notdel)
         super().perform_destroy(instance)
 
 
@@ -43,10 +46,10 @@ class CommentViewSet(viewsets.ModelViewSet):
 
     def perform_update(self, serializer):
         if serializer.instance.author != self.request.user:
-            raise PermissionDenied('Изменение чужого комментария запрещено!')
+            raise PermissionDenied(notchange)
         super().perform_update(serializer)
 
     def perform_destroy(self, instance):
         if instance.author != self.request.user:
-            raise PermissionDenied('Удалние чужого комментария запрещено!')
+            raise PermissionDenied(notdel)
         super().perform_destroy(instance)
