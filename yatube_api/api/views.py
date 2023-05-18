@@ -9,6 +9,7 @@ from .serializers import GroupSerializer, PostSerializer, CommentSerializer
 notchange = 'Изменение чужого контента запрещено!'
 notdel = 'Удалние чужого поста запрещено!'
 
+
 class GroupViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Group.objects.all()
     serializer_class = GroupSerializer
